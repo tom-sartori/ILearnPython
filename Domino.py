@@ -12,6 +12,9 @@ class Domino:
         self.left = self.right
         self.right = memory
 
+    def contains(self, value: int):
+        return self.left == value or self.right == value
+
     def __str__(self):
         return "[" + str(self.left) + "|" + str(self.right) + "]"
 
