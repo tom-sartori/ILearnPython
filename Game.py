@@ -17,18 +17,29 @@ class Game:
         self.newGame()
 
     def __getLeftExtremity(self) -> Domino or None:
+        """
+        :return: The left extremity of the played dominos.
+        """
         if len(self.domino_played_list):
             return self.domino_played_list[0].left
         else:
             return None
 
     def __getRightExtremity(self) -> Domino or None:
+        """
+        :return: The right extremity of the played dominos.
+        """
         if len(self.domino_played_list):
             return self.domino_played_list[-1].right
         else:
             return None
 
     def __canPlay(self, domino: Domino, side: Side):
+        """
+        :param: domino: The domino to play.
+        :param: side: The side to play the domino.
+        :return: True if the domino can be played, False otherwise.
+        """
         if side == Side.LEFT:
             return (not self.__getLeftExtremity()) or self.__getLeftExtremity() == domino.right
         elif side == Side.RIGHT:
@@ -37,18 +48,29 @@ class Game:
             return False
 
     def __currentPlayerCanPlay(self) -> bool:
+        """
+        :return: True if the current player can play, False otherwise.
+        """
         for domino in self.__getCurrentPlayerList():
             if domino.contains(self.__getLeftExtremity()) or domino.contains(self.__getRightExtremity()):
                 return True
         return False
 
     def __getCurrentPlayerList(self) -> [Domino]:
+        """
+        :return: The list of dominos of the current player.
+        """
         if self.isPlayer1ToPlay:
             return self.player1_list
         else:
             return self.player2_list
 
     def put(self, domino: Domino, side: Side) -> bool:
+        """
+        :param: domino: The domino to play.
+        :param: side: The side to play the domino.
+        :return: True if the domino has been played, False otherwise.
+        """
         if self.__canPlay(domino, side):
             self.__removeDominoFromCurrentPlayer(domino)
             if side == Side.LEFT:
@@ -60,15 +82,25 @@ class Game:
             return False
 
     def currentPlayerTakeACard(self):
+        """
+        The current player takes a card from the stock. So it adds a card to its list of dominos.
+        """
         if len(self.domino_stock_list):
             domino = self.domino_stock_list[0]
             self.domino_stock_list = self.domino_stock_list[1::]
             self.__getCurrentPlayerList().append(domino)
 
     def __shuffleDominoStock(self):
+        """
+        Shuffle the domino stock.
+        """
         random.shuffle(self.domino_stock_list)
 
     def __setFirstPlayer(self):
+        """
+        Set the first player to play. The player with the highest double will play first.
+        If there is no double, a random player is chosen.
+        """
         max_double_player_1 = Domino.getMaxDouble(self.player1_list)
         max_double_player_2 = Domino.getMaxDouble(self.player2_list)
 
@@ -78,6 +110,9 @@ class Game:
             self.isPlayer1ToPlay = max_double_player_1 > max_double_player_2
 
     def newGame(self):
+        """
+        Start a new game. The stock is shuffled and the players are given 6 dominos.
+        """
         self.domino_stock_list = Domino.createDominoList()
         self.__shuffleDominoStock()
 
@@ -93,12 +128,23 @@ class Game:
         self.__setFirstPlayer()
 
     def __getCurrentDomino(self, index: int) -> Domino:
+        """
+        :param: index: The index of the domino to get in the current player list of dominos.
+        :return: The domino at the given index.
+        """
         return self.__getCurrentPlayerList()[index]
 
     def __removeDominoFromCurrentPlayer(self, domino: Domino):
+        """
+        Remove the given domino from the current player list of dominos.
+        """
         self.__getCurrentPlayerList().remove(domino)
 
     def __getScorePlayer(self, player: int) -> int:
+        """
+        :param: player: The player to get the score. 1 or 2.
+        :return: The score of the given player. Make a sum of the values of the dominos.
+        """
         score = 0
         player_domino_list: [Domino] = []
         if player == 1:
@@ -111,6 +157,9 @@ class Game:
         return score
 
     def __getWinner(self) -> int:
+        """
+        :return: The winner of the game. 1 or 2.
+        """
         if not len(self.player1_list):
             return 1
         elif not len(self.player2_list):
@@ -119,6 +168,9 @@ class Game:
             return 1 if self.__getScorePlayer(1) < self.__getScorePlayer(2) else 2
 
     def play(self):
+        """
+        Play the game. The game is played until one of the players has won.
+        """
         print('Welcome to this game!\n')
         print(self)
 
@@ -157,6 +209,9 @@ class Game:
             print("See you!")
 
     def __str__(self):
+        """
+        :return: A string representation of the game.
+        """
         result = 'Dominos in stock : '
         result += utils.toString(self.domino_stock_list)
 

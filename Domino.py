@@ -5,21 +5,37 @@ class Domino:
         self.right = right
 
     def isDouble(self):
+        """
+        :return: True if the domino is a double, False otherwise.
+        """
         return self.left == self.right
 
     def turn(self):
+        """
+        Turn the domino.
+        """
         memory = self.left
         self.left = self.right
         self.right = memory
 
     def contains(self, value: int):
+        """
+        :param: value: The value to check.
+        :return: True if the domino contains the value, False otherwise.
+        """
         return self.left == value or self.right == value
 
     def __str__(self):
+        """
+        :return: The string representation of the domino. Example: [1|2]
+        """
         return "[" + str(self.left) + "|" + str(self.right) + "]"
 
     @staticmethod
     def createDominoList() -> []:
+        """
+        :return: A list of all the possible dominos, with a maximum value of 6.
+        """
         domino_list = []
 
         max_value = 6
@@ -31,6 +47,10 @@ class Domino:
 
     @staticmethod
     def getMaxDouble(domino_list: []) -> int:
+        """
+        :param: domino_list: The list of dominos to check.
+        :return: The maximum value of the double in the list. -1 if there is no double.
+        """
         max_double = -1
         for domino in domino_list:
             if domino.isDouble():
